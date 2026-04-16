@@ -14,8 +14,54 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
-  // TA CONFIG FIREBASE
-const firebaseConfig = {
+  // CONFIG FIREBASE - J'AI MIS LA TIENNE DE TA CAPTURE
+  const firebaseConfig = {
+    apiKey: "AIzaSyBfNIlBwnImCYZYzV0SUjWOg349VSeNtqc",
+    authDomain: "gestion-ad-eglise.firebaseapp.com",
+    databaseURL: "https://gestion-ad-eglise-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "gestion-ad-eglise",
+    storageBucket: "gestion-ad-eglise.firebasestorage.app",
+    messagingSenderId: "565084347172",
+    appId: "1:565084347172:web:7f5db3212b1a2d8a8f1b1"
+  };
+
+  // INITIALISATION
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  // FONCTION OEIL
+  function toggleMdp() {
+    const input = document.getElementById('codeInput');
+    const icon = event.target;
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.textContent = '🙈';
+    } else {
+      input.type = 'password';
+      icon.textContent = '👁️';
+    }
+  }
+
+  // FONCTION VÉRIFIER CODE
+  function verifierCode() {
+    const codeSaisi = document.getElementById('codeInput').value;
+    db.ref('eglise/codeAcces').once('value').then((snapshot) => {
+      if (snapshot.exists() && snapshot.val() === codeSaisi) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+      } else {
+        alert('Code incorrect');
+      }
+    });
+  }
+
+  // MET 1234 PAR DÉFAUT SI VIDE
+  db.ref('eglise/codeAcces').once('value').then((snapshot) => {
+    if (!snapshot.exists()) {
+      db.ref('eglise/codeAcces').set("1234");
+    }
+  });
+</script>
   apiKey: "AIzaSyBfNlIBwh1mCYZYzV0SUjWOg349VSeNtqc",
   authDomain: "gestion-ad-eglise.firebaseapp.com",
   databaseURL: "https://gestion-ad-eglise-default-rtdb.europe-west1.firebasedatabase.app",
